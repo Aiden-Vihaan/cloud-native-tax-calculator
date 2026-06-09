@@ -1,0 +1,20 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: tax-calculator-tasks
+spec:
+  steps:
+    - name: npminstall
+      image: node:16
+      workingDir: /workspace/source/zntwk-tax_calculator
+      command:
+        - npm
+      args:
+        - install
+    - name: jasminetests
+      image: node:16
+      workingDir: /workspace/source/zntwk-tax_calculator
+      command:
+        - npx
+      args:
+        - jasmine
