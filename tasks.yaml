@@ -1,20 +1,25 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: tax-calculator-tasks
+  name: npm
 spec:
+  workspaces:
+    - name: source
   steps:
     - name: npminstall
-      image: node:16
-      workingDir: /workspace/source/zntwk-tax_calculator
-      command:
-        - npm
-      args:
-        - install
-    - name: jasminetests
-      image: node:16
-      workingDir: /workspace/source/zntwk-tax_calculator
-      command:
-        - npx
-      args:
-        - jasmine
+      image: node:20-buster-slim
+      workingDir: $(workspaces.source.path)
+      script: |
+        #!/bin/bash
+        set -e
+
+        echo "***** Environment *****"
+        npm --version
+        pwd
+
+        echo "***** Cleaning npm cache *****"
+        npm cache clean --force
+
+        echo "***** Running npm install *****"
+        npm install
+---
